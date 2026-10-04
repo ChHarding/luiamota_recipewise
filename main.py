@@ -17,8 +17,27 @@ app = Flask(__name__)
 # - Receive user's search input
 # - Send request to TheMealDB API
 # - Return matching recipes
+# ---------------------------------------------------
+
+# Importing requests library to be able to call TheMealDB API and get recipe data
+import requests
 def search_recipes():
-    pass
+    #Asking user for recipe name to search
+    recipe_name = input("Enter recipe name to search: ")
+    print(f"Searching for recipes matching: {recipe_name}")
+    
+    # Making a request to TheMealDB API to search for recipes
+    url = f"https://www.themealdb.com/api/json/v1/1/search.php?s={recipe_name}"
+    response = requests.get(url)
+    # Turn the response to JSON format
+    data = response.json()
+    # I need to print the recipe name only, as now it prints the whole JSON data. 
+    #for meals in data:
+    #    print(meals['strMeal'])
+    # What if there's no recipe found? Think about that scenario. 
+    print (data)
+
+search_recipes()
 
 # ==================================================
 # BLOCK 2: RECIPE DETAILS
