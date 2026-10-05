@@ -31,11 +31,18 @@ def search_recipes():
     response = requests.get(url)
     # Turn the response to JSON format
     data = response.json()
-    # I need to print the recipe name only, as now it prints the whole JSON data. 
-    #for meals in data:
-    #    print(meals['strMeal'])
-    # What if there's no recipe found? Think about that scenario. 
-    print (data)
+    
+    # This if statement aims to check if the search input exists in the API response. 
+    # If it doesn't, it will print a message to the user telling no recipes were found.
+    if data['meals'] is None:
+        print("No recipes found for your search.")
+    # Else, if the search input exists in the API response, it will print the names 
+    # of the recipes found.
+    else:
+        # The for loop will look for the key 'meals' in the data and print only the 
+        # value of 'strMeal' for each meal found.
+        for meals in data['meals']:
+            print(meals['strMeal'])
 
 search_recipes()
 
