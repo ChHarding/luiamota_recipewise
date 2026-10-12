@@ -13,7 +13,11 @@
     
     {% for meal in meals %}
         <div>
-            <h3> {{meal["strMeal"]}} </h3>
+            <h3>
+                <a href="/recipe/{{meal["idMeal"]}}">
+                    {{meal["strMeal"]}}
+                </a>
+            </h3>
             <img src="{{meal["strMealThumb"]}}" alt="{{meal["strMeal"]}}" width="200">
             <p> <b>Country:</b> {{meal["strArea"]}} </p>
         </div>

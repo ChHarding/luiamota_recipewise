@@ -17,6 +17,7 @@ RecipeWise is a Flask web application that allows users to searcg for recipes us
 ## Project Structure
 - main.py
 - docs 
+- templates
 
 ## Author
 Luisa Carolina Mota Romero

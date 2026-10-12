@@ -6,11 +6,14 @@
 <body>
     <h1>Recipe Details Page</h1>
     <p>This page will display detailed information about a specific recipe.</p>
-    <h2> Recipe Name/ID </h2>
-    <p>Image here:</p>
-    <p>Ingredients here:</p>
-    <p>Instructions here:</p>
-    
+    <h2> Recipe: {{recipe["strMeal"]}} </h2>
+    <p> Recipe Name/ID: {{ recipe["idMeal"] }} </p>
+    <p> Image here: </p>
+    <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
+    <p>Ingredients here: {{ recipe["strIngredients"] }}</p>
+    <p>Instructions here:
+        {{ recipe["strInstructions"] }}
+    </p>
     <!-- Recipe details will be displayed here -->
 </body>
 </html>

@@ -30,7 +30,6 @@ app = Flask(__name__)
 # ---------------------------------------------------
 
 def search_recipes(recipe_name):
-    
     # Making a request to TheMealDB API to search for recipes
     url = f"https://www.themealdb.com/api/json/v1/1/search.php?s={recipe_name}"
     response = requests.get(url)
@@ -46,8 +45,18 @@ def search_recipes(recipe_name):
 # - Show ingredients
 # - Show instructions
 # - Show recipe image
-def display_recipe_details():
-    pass
+#
+#  What's new in this version:
+# ---------------------------------------------------
+def get_recipe_details(meal_id):
+    # Getting the recipe details from one recipe using the meal_id from TheMealDB API
+    url = f"https://www.themealdb.com/api/json/v1/1/lookup.php?i={meal_id}"
+    response = requests.get(url)
+    
+    # Turn the response to JSON format
+    data = response.json()
+    # Returning the recipe details from the API 
+    return data["meals"][0]
 
 # ==================================================
 # BLOCK 3: SAVE RECIPES
@@ -56,6 +65,9 @@ def display_recipe_details():
 # - Save selected recipe
 # - Store recipe information
 # - Manage favorite recipes
+#
+#  What's new in this version:
+# ---------------------------------------------------
 def save_recipe():
     pass
 
@@ -66,10 +78,25 @@ def save_recipe():
 # - Retrieve saved recipes
 # - Display saved recipes
 # - Refresh recipe information if needed
+#
+#  What's new in this version:
+# ---------------------------------------------------
+
 def get_saved_recipes():
     pass
 
-# Create a route for the home page
+# ==================================================
+# FLASK ROUTES
+# ==================================================
+# Purpose: 
+# - Connect the Flask application with the HTML templates
+# Pages: 
+# - Home page (index.html)
+# - Recipe details page (recipe_details.html)
+# - Favorite recipes page (favorites.html)
+# ---------------------------------------------------
+
+# Create a route for the home page (index.html) where users can search for recipes
 @app.route("/", methods=["GET", "POST"])
 def home():
     meals = []
@@ -79,12 +106,13 @@ def home():
         meals = search_recipes(recipe_name)
     return render_template("index.html", meals=meals)
 
-# Create a route for the recipe details page
+# Create a route for the recipe details page (recipe_details.html) where users can view the details of a selected recipe.
 @app.route("/recipe/<int:meal_id>")
 def recipe_details(meal_id):
-    return render_template("recipe_details.html")
+   # return f"You selected recipe with ID: {meal_id}"
+    return render_template("recipe_details.html", recipe=get_recipe_details(meal_id))
 
-# Future: Create a route for favorite recipes page
+# Future: Create a route for favorite recipes page (favorites.html) where users can view their saved recipes.
 @app.route("/favorites")
 def favorites():
     return render_template("favorites.html")
