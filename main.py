@@ -47,6 +47,14 @@ def search_recipes(recipe_name):
 # - Show recipe image
 #
 #  What's new in this version:
+# - When a user clicks on a recipe from the search results, they are redirected to the recipe details page.
+# - RecipeWise retrieves detailed recipe information from TheMealDB API using the selected meal_id.
+# - The recipe details are displayed on the recipe_details.html page.
+#   Information displayed includes:
+#      - Recipe's name
+#      - Recipe's ID
+#      - Recipe's image
+#      - Recipe's instructions
 # ---------------------------------------------------
 def get_recipe_details(meal_id):
     # Getting the recipe details from one recipe using the meal_id from TheMealDB API
