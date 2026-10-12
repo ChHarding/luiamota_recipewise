@@ -19,8 +19,15 @@ app = Flask(__name__)
 # - Receive user's search input
 # - Send request to TheMealDB API
 # - Return matching recipes
+# 
+#  What's new in this version:
+# - The user enters a recipe name in the search bar on the home page, located in index.html.
+# - Flask receives the search input and send a request to TheMealDB API.
+# - Matching recipes are returned and displayed on the home page.
+#   - Recipe name
+#   - Recipe image
+#   - Recipe country of origin
 # ---------------------------------------------------
-
 
 def search_recipes(recipe_name):
     
@@ -62,6 +69,7 @@ def save_recipe():
 def get_saved_recipes():
     pass
 
+# Create a route for the home page
 @app.route("/", methods=["GET", "POST"])
 def home():
     meals = []
@@ -70,6 +78,16 @@ def home():
         print(f"Searching for recipes matching: {recipe_name}")
         meals = search_recipes(recipe_name)
     return render_template("index.html", meals=meals)
+
+# Create a route for the recipe details page
+@app.route("/recipe/<int:meal_id>")
+def recipe_details(meal_id):
+    return render_template("recipe_details.html")
+
+# Future: Create a route for favorite recipes page
+@app.route("/favorites")
+def favorites():
+    return render_template("favorites.html")
 
 if __name__ == "__main__":
     app.run(debug=True,port=5001)
