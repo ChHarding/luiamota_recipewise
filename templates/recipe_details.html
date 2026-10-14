@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<header>
+    <title>Recipe Details</title>
+    <a href="/">Home</a> |
+    <a href="/favorites">Favorites</a>
+</header>
+<body>
+    <h1>Recipe Details Page</h1>
+    <p>This page will display detailed information about a specific recipe.</p>
+    <h2> Recipe: {{recipe["strMeal"]}} </h2>
+    <p> Recipe Name/ID: {{ recipe["idMeal"] }} </p>
+    <p> Image here: </p>
+    <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
+    <p>Ingredients here: Still WIP </p>
+    <p>Instructions here: Still WIP
+        {{ recipe["strInstructions"] }}
+    </p>
+    <!-- Recipe details will be displayed here -->
+</body>
+</html>

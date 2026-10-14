@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<header>
+    <title>RecipeWise</title>
+    <a href="/">Home</a> |
+    <a href="/favorites">Favorites</a>
+</header>
+<body>
+    <h1>Welcome to RecipeWise! WIP</h1>
+
+    <form method= "POST">
+        <input type="text" name="recipe_name" placeholder="Search for a recipe">
+        <button type="submit">Search</button>
+    </form>
+    
+    {% for meal in meals %}
+        <div>
+            <h3>
+                <a href="/recipe/{{meal["idMeal"]}}">
+                    {{meal["strMeal"]}}
+                </a>
+            </h3>
+            <img src="{{meal["strMealThumb"]}}" alt="{{meal["strMeal"]}}" width="200">
+            <p> <b>Country:</b> {{meal["strArea"]}} </p>
+        </div>
+         <hr>
+    {% endfor %}    
+
+</body>
+</html>
+
+
+
