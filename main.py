@@ -83,8 +83,11 @@ def get_recipe_details(meal_id):
 favorites = []
 def save_recipe(meal_id):
     recipe = get_recipe_details(meal_id)
+    for saved_recipe in favorites:
+        if saved_recipe["idMeal"] == recipe ["idMeal"]:
+            return "Oops! Recipe previously saved!"
     favorites.append(recipe)
-    print (len(favorites))
+    return "Recipe saved!"
 
 # ==================================================
 # BLOCK 4: VIEW SAVED RECIPES
@@ -169,9 +172,9 @@ def recipe_details(meal_id):
 @app.route("/favorites/add/<int:meal_id>", methods=["POST"])
 def add_favorites(meal_id):
     
-    save_recipe(meal_id)
+    message = save_recipe(meal_id)
     
-    return f"Recipe added to favorites! Total favorites: {len(favorites)}"
+    return render_template("favorites.html", favorites=favorites, message=message)
     
     #return render_template("favorites.html")
 
