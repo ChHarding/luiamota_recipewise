@@ -9,6 +9,10 @@
     <h1>Recipe Details Page</h1>
     <h2> Recipe: {{recipe["strMeal"]}} </h2>
     <p> Recipe Name/ID: {{ recipe["idMeal"] }} </p>
+    <form action="/favorites/add//{{recipe["idMeal"]}}" method="POST">
+        <button type="submit">Add to Favorites</button>
+    </form>
+    
     <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
     <h3>Ingredients:</h3>
     <ul>
@@ -23,6 +27,6 @@
             <li>{{ step }}</li>
         {% endfor %}
         </ul>
-    <!-- Recipe details will be displayed here -->
+   
 </body>
 </html>

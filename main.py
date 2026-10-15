@@ -126,9 +126,12 @@ def recipe_details(meal_id):
     # So will need to handle that in the future. For now, we will just split by new lines.
     # ---------------------------------------------------------------------------------
     instructions = recipe["strInstructions"].split("\n")
+    instructions = []
+    for step in recipe["strInstructions"].split("\n"):
+        if step.strip():  # Only add non-empty steps
+            instructions.append(step)
     
     # Extract ingredients and their measurements from the recipe details
-    
     ingredients = []
     #Loop through the possible ingredient and measurement fields
     # TheMealDB API has up to 20 ingredients (that's why we loop from 1 to 21. Needed help with this part from ChatGPT)
@@ -147,9 +150,10 @@ def recipe_details(meal_id):
         )
 
 # Future: Create a route for favorite recipes page (favorites.html) where users can view their saved recipes.
-@app.route("/favorites")
-def favorites():
-    return render_template("favorites.html")
+@app.route("/favorites/add/<int:meal_id>", methods=["POST"])
+def add_favorites(meal_id):
+    return f"Recipe with ID {meal_id} added to favorites!"
+    #return render_template("favorites.html")
 
 if __name__ == "__main__":
     app.run(debug=True,port=5001)
