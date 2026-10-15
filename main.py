@@ -79,8 +79,12 @@ def get_recipe_details(meal_id):
 #
 #  What's new in this version:
 # ---------------------------------------------------
-def save_recipe():
-    pass
+#Temporary storage for saved recipes. WIP. 
+favorites = []
+def save_recipe(meal_id):
+    recipe = get_recipe_details(meal_id)
+    favorites.append(recipe)
+    print (len(favorites))
 
 # ==================================================
 # BLOCK 4: VIEW SAVED RECIPES
@@ -110,7 +114,6 @@ def get_saved_recipes():
 # ---------------------------------------------------
 # HOME PAGE ROUTE (index.html)
 # ---------------------------------------------------
-
 # Create a route for the home page where users can search for recipes
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -165,7 +168,11 @@ def recipe_details(meal_id):
 # Create a route for favorite recipes page where users can view their saved recipes.
 @app.route("/favorites/add/<int:meal_id>", methods=["POST"])
 def add_favorites(meal_id):
-    return f"Recipe with ID {meal_id} added to favorites!"
+    
+    save_recipe(meal_id)
+    
+    return f"Recipe added to favorites! Total favorites: {len(favorites)}"
+    
     #return render_template("favorites.html")
 
 if __name__ == "__main__":
