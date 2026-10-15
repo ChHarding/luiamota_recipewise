@@ -2,15 +2,14 @@
 RecipeWise - A Flask web application that allows users to search for recipes
 and save favorite recipes for later viewing.
 """
-# Version 1 focuses on project setup and application structure.
 
-# Import Flask framework
+# Importing Flask framework and render_template to render HTML templates (index.html, recipe_details.html, favorites.html)
 from flask import Flask, render_template, request 
 # Importing requests library to be able to call TheMealDB API and get recipe data 
 import requests
 
+# Creating a Flask application instance
 app = Flask(__name__)
-
 
 # ==================================================
 # BLOCK 1: SEARCH RECIPES
@@ -30,11 +29,13 @@ app = Flask(__name__)
 # ---------------------------------------------------
 
 def search_recipes(recipe_name):
-    # Making a request to TheMealDB API to search for recipes
+    # Making a request to TheMealDB API to search for recipes based on the recipe_name provided by the user.
     url = f"https://www.themealdb.com/api/json/v1/1/search.php?s={recipe_name}"
+    # Sending a GET request to the API.
     response = requests.get(url)
-    # Turn the response to JSON format
+    # Turning the response to JSON format.
     data = response.json()
+    # Returning the list of matching recipes (meals) from the API response.
     return data ["meals"]
 
 # ==================================================
@@ -54,14 +55,16 @@ def search_recipes(recipe_name):
 #      - Recipe's name
 #      - Recipe's ID
 #      - Recipe's image
+#      - Recipe's ingredients and measurements
 #      - Recipe's instructions
+#      - Button to add the recipe to favorites (functionality not yet implemented)
 # ---------------------------------------------------
 def get_recipe_details(meal_id):
     # Getting the recipe details from one recipe using the meal_id from TheMealDB API
     url = f"https://www.themealdb.com/api/json/v1/1/lookup.php?i={meal_id}"
+    # Sending a GET request to the API to retrieve the recipe details.
     response = requests.get(url)
-    
-    # Turn the response to JSON format
+    # Turning the response to JSON format
     data = response.json()
     # Returning the recipe details from the API 
     return data["meals"][0]
@@ -104,7 +107,11 @@ def get_saved_recipes():
 # - Favorite recipes page (favorites.html)
 # ---------------------------------------------------
 
-# Create a route for the home page (index.html) where users can search for recipes
+# ---------------------------------------------------
+# HOME PAGE ROUTE (index.html)
+# ---------------------------------------------------
+
+# Create a route for the home page where users can search for recipes
 @app.route("/", methods=["GET", "POST"])
 def home():
     meals = []
@@ -114,7 +121,10 @@ def home():
         meals = search_recipes(recipe_name)
     return render_template("index.html", meals=meals)
 
-# Create a route for the recipe details page (recipe_details.html) where users can view the details of a selected recipe.
+# ---------------------------------------------------
+# RECIPE DETAILS ROUTE (recipe_details.html)
+# ---------------------------------------------------
+# Create a route for the recipe details page where users can view the details of a selected recipe.
 @app.route("/recipe/<int:meal_id>")
 def recipe_details(meal_id):
     # Get the recipe details using the meal_id from TheMealDB API
@@ -130,11 +140,11 @@ def recipe_details(meal_id):
     for step in recipe["strInstructions"].split("\n"):
         if step.strip():  # Only add non-empty steps
             instructions.append(step)
-    
+            
     # Extract ingredients and their measurements from the recipe details
     ingredients = []
     #Loop through the possible ingredient and measurement fields
-    # TheMealDB API has up to 20 ingredients (that's why we loop from 1 to 21. Needed help with this part from ChatGPT)
+    # TheMealDB API has up to 20 ingredients (that's why we loop from 1 to 21. Needed help with this part from AI)
     for i in range(1, 21):
         ingredient = recipe.get(f"strIngredient{i}")
         measure = recipe.get(f"strMeasure{i}")
@@ -149,7 +159,10 @@ def recipe_details(meal_id):
         ingredients=ingredients
         )
 
-# Future: Create a route for favorite recipes page (favorites.html) where users can view their saved recipes.
+# ---------------------------------------------------
+# FAVORITES ROUTE (favorites.html)
+# ---------------------------------------------------
+# Create a route for favorite recipes page where users can view their saved recipes.
 @app.route("/favorites/add/<int:meal_id>", methods=["POST"])
 def add_favorites(meal_id):
     return f"Recipe with ID {meal_id} added to favorites!"
