@@ -117,8 +117,34 @@ def home():
 # Create a route for the recipe details page (recipe_details.html) where users can view the details of a selected recipe.
 @app.route("/recipe/<int:meal_id>")
 def recipe_details(meal_id):
-   # return f"You selected recipe with ID: {meal_id}"
-    return render_template("recipe_details.html", recipe=get_recipe_details(meal_id))
+    # Get the recipe details using the meal_id from TheMealDB API
+    recipe = get_recipe_details(meal_id)
+    
+    # Split the instructions into a list of steps for better display in the template
+    # ---------------------------------------------------------------------------------
+    # Note: Each recipe has different formatting for each step in the instructions. 
+    # So will need to handle that in the future. For now, we will just split by new lines.
+    # ---------------------------------------------------------------------------------
+    instructions = recipe["strInstructions"].split("\n")
+    
+    # Extract ingredients and their measurements from the recipe details
+    
+    ingredients = []
+    #Loop through the possible ingredient and measurement fields
+    # TheMealDB API has up to 20 ingredients (that's why we loop from 1 to 21. Needed help with this part from ChatGPT)
+    for i in range(1, 21):
+        ingredient = recipe.get(f"strIngredient{i}")
+        measure = recipe.get(f"strMeasure{i}")
+        # Only add the ingredient if it is not empty
+        if ingredient and ingredient.strip():
+            ingredients.append(f"{measure} {ingredient}")
+    
+    return render_template(
+        "recipe_details.html", 
+        recipe=recipe, 
+        instructions=instructions,
+        ingredients=ingredients
+        )
 
 # Future: Create a route for favorite recipes page (favorites.html) where users can view their saved recipes.
 @app.route("/favorites")
