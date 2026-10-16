@@ -2,10 +2,17 @@
 FAVORITES PAGE
 
 Purpose:
-Displays all recipes saved by the user. Each recipe
-includes a name, image, and country of origin.
-Users can click a recipe name to return to the
-Recipe Details page.
+Displays all recipes saved by the user. Each recipe includes:
+- Recipe Name
+- Recipe Image
+- Country of origin.
+
+Users can click a recipe name to navigate back to the Recipe Details page.
+
+Feedback:
+When a user clicks the Save Recipe button, the application displays:
+- A success message when the recipe is saved successfully
+- An error message when the recipe has already been saved
 ================================================== -->
 
 <!DOCTYPE html>
@@ -18,6 +25,10 @@ Recipe Details page.
 </header>
 <body>
     <h1>My favorites recipes</h1>
+    {% if message%}
+        <p>{{message}}</p>
+    {% endif %}
+
     {% for recipe in favorites %}
         <div>
             <h3>
@@ -31,9 +42,5 @@ Recipe Details page.
         <hr>
     {% endfor %}
     
-    {% if message%}
-        <p>{{message}}</p>
-    {% endif %}
-
 </body>
 </html>

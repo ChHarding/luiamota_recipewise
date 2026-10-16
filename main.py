@@ -78,12 +78,22 @@ def get_recipe_details(meal_id):
 # - Manage favorite recipes
 #
 #  What's new in this version:
+# - Created a temporary favorites list to store saved recipes
+# - Connected the Save Recipe button to the Favorites workflow
+# - Displayed saved recipes on the Favorites page. Each recipe mantains the same style
+#   as the search result list (recipe name, image and country of origin)
+# - Added clickable recipe names that redirect users to the Recipe Details page
+# - Added success and duplicate-save feedback messages
+
 # ---------------------------------------------------
 #Temporary storage for saved recipes. WIP. 
 favorites = []
 def save_recipe(meal_id):
     recipe = get_recipe_details(meal_id)
+# This loop checks each saved recipe in the favorites list.
+# If a matching recipe ID is found, the recipe is not saved again.
     for saved_recipe in favorites:
+        #Compare IDs to prevent duplicate favorites. 
         if saved_recipe["idMeal"] == recipe ["idMeal"]:
             return "Oops! Recipe previously saved!"
     favorites.append(recipe)
@@ -125,7 +135,10 @@ def home():
         recipe_name = request.form["recipe_name"]
         print(f"Searching for recipes matching: {recipe_name}")
         meals = search_recipes(recipe_name)
-    return render_template("index.html", meals=meals)
+    return render_template(
+        "index.html", 
+        meals=meals
+        )
 
 # ---------------------------------------------------
 # RECIPE DETAILS ROUTE (recipe_details.html)
@@ -171,10 +184,17 @@ def recipe_details(meal_id):
 # Create a route for favorite recipes page where users can view their saved recipes.
 @app.route("/favorites/add/<int:meal_id>", methods=["POST"])
 def add_favorites(meal_id):
-    
+
+# Get a feedback message for the user based on the save operation:
+# recipe saved successfully or recipe already exists in favorites.
+# for loop at def save_recipe()
     message = save_recipe(meal_id)
     
-    return render_template("favorites.html", favorites=favorites, message=message)
+    return render_template(
+        "favorites.html", 
+        favorites=favorites, 
+        message=message
+        )
     
     #return render_template("favorites.html")
 
