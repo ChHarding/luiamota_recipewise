@@ -198,5 +198,9 @@ def add_favorites(meal_id):
     
     #return render_template("favorites.html")
 
+@app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
+def remove_favorites(meal_id):
+    return f"Remove recipe {meal_id}"
+
 if __name__ == "__main__":
     app.run(debug=True,port=5001)

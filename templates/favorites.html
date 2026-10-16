@@ -39,6 +39,9 @@ When a user clicks the Save Recipe button, the application displays:
             <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
             <p><b>Country:</b> {{recipe["strArea"]}}</p>
         </div>
+        <form action="/favorites/remove//{{recipe["idMeal"]}}" method="POST">
+        <button type="submit">Remove from Favorites</button>
+    </form>
         <hr>
     {% endfor %}
     
