@@ -57,7 +57,7 @@ def search_recipes(recipe_name):
 #      - Recipe's image
 #      - Recipe's ingredients and measurements
 #      - Recipe's instructions
-#      - Button to add the recipe to favorites (functionality not yet implemented)
+#      - Button to add the recipe to favorites
 # ---------------------------------------------------
 def get_recipe_details(meal_id):
     # Getting the recipe details from one recipe using the meal_id from TheMealDB API
