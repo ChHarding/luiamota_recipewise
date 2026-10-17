@@ -1,3 +1,20 @@
+<!-- ==================================================
+FAVORITES PAGE
+
+Purpose:
+Displays all recipes saved by the user. Each recipe includes:
+- Recipe Name
+- Recipe Image
+- Country of origin.
+
+Users can click a recipe name to navigate back to the Recipe Details page.
+
+Feedback:
+When a user clicks the Save Recipe button, the application displays:
+- A success message when the recipe is saved successfully
+- An error message when the recipe has already been saved
+================================================== -->
+
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html>
@@ -8,7 +25,25 @@
 </header>
 <body>
     <h1>My favorites recipes</h1>
-    <h3>No Favorites yet!</h3>
-    <p>This page will display the user's favorite recipes.</p>
+    {% if message%}
+        <p>{{message}}</p>
+    {% endif %}
+
+    {% for recipe in favorites %}
+        <div>
+            <h3>
+                <a href="/recipe/{{recipe["idMeal"]}}">
+                    {{recipe["strMeal"]}} 
+                </a>
+            </h3>
+            <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
+            <p><b>Country:</b> {{recipe["strArea"]}}</p>
+        </div>
+        <form action="/favorites/remove//{{recipe["idMeal"]}}" method="POST">
+        <button type="submit">Remove from Favorites</button>
+    </form>
+        <hr>
+    {% endfor %}
+    
 </body>
 </html>
