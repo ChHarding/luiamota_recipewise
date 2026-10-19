@@ -26,7 +26,9 @@ When a user clicks the Save Recipe button, the application displays:
 <body>
     <h1>My favorites recipes</h1>
     {% if message%}
-        <p>{{message}}</p>
+    <div class="message">
+        {{message}}
+    </div>
     {% endif %}
 
     {% for recipe in favorites %}

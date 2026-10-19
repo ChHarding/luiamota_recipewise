@@ -105,7 +105,7 @@ def save_recipe(meal_id):
     # If the system finds a matching meal ID on the database,it won't create a duplicated 
     # favorite entry. The system will display error message.
     if existing_recipe.data:
-        return "Oops! Recipe previously saved!"
+        return "Recipe is already in your favorites."
     
     # However, if the meal ID is new in the database, the system will save the recipe information
     # on the supabase favorites table. 
@@ -117,7 +117,7 @@ def save_recipe(meal_id):
     }) .execute()
     
     # Successful message will be displayed. 
-    return "Recipe saved!"
+    return "Recipe saved successfully."
 
 # ==================================================
 # BLOCK 4: VIEW SAVED RECIPES
@@ -237,6 +237,7 @@ def add_favorites(meal_id):
 # Route to remove recipe from Favorites Table.
 @app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
 def remove_favorites(meal_id):
+    message = "Recipe removed successfully."
     # Removing the recipe from Supabase fav table
     response = (
         supabase.table("favorites")
@@ -254,7 +255,8 @@ def remove_favorites(meal_id):
     
     return render_template (
         "favorites.html",
-        favorites=favorites 
+        favorites=favorites, 
+        message=message
     )
 
 if __name__ == "__main__":

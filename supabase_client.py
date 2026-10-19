@@ -8,9 +8,14 @@ and Supabase database.
 """
 # Import create_client from Supabase to create a database connection.
 from supabase import create_client
+from dotenv import load_dotenv
+import os
+# Pull variablers from the .env file
+load_dotenv()
 
-# URL of the RecipeWise Supabase project.
-url = "https://abjgsrimmsyjgvjxezyy.supabase.co"
+# Get Supabase credentials
+url = os.getenv("Supabase_URL")
+key = os.getenv ("Supabase_Key")
 
 # Public API key used to connect the application to Supabase.
 key = "sb_publishable_pKS7XPkqFelBFTbtlDX20w_0cPvVaj2"
