@@ -38,3 +38,48 @@ def search_recipes():
             print(meal['strMeal'])
 
 #search_recipes()
+# -------------------------------------------------------------
+#
+#
+# -------------------------------------------------------------
+#
+#
+# IMPORTANT: 
+# This block currently uses the original implementation.
+# It is being retained as a reference while the project is migrated to Supabase.
+# (Updated: Oct. 19, 2026)
+# ==================================================
+# BLOCK 3: SAVE RECIPES
+# ==================================================
+# Functionality:
+# - Save selected recipe
+# - Store recipe information
+# - Manage favorite recipes
+#
+#  What's new in this version:
+# - Created a temporary favorites list to store saved recipes
+# - Connected the Save Recipe button to the Favorites workflow
+# - Displayed saved recipes on the Favorites page. Each recipe mantains the same style
+#   as the search result list (recipe name, image and country of origin)
+# - Added clickable recipe names that redirect users to the Recipe Details page
+# - Added success and duplicate-save feedback messages
+
+# ---------------------------------------------------
+#Temporary storage for saved recipes. WIP. 
+favorites = []
+def save_recipe(meal_id):
+    recipe = get_recipe_details(meal_id)
+# This loop checks each saved recipe in the favorites list.
+# If a matching recipe ID is found, the recipe is not saved again.
+    for saved_recipe in favorites:
+        #Compare IDs to prevent duplicate favorites. 
+        if saved_recipe["idMeal"] == recipe ["idMeal"]:
+            return "Oops! Recipe previously saved!"
+    favorites.append(recipe)
+    return "Recipe saved!"
+# -------------------------------------------------------------
+#
+#
+# -------------------------------------------------------------
+#
+#

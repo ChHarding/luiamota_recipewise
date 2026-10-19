@@ -86,17 +86,37 @@ def get_recipe_details(meal_id):
 # - Added success and duplicate-save feedback messages
 
 # ---------------------------------------------------
-#Temporary storage for saved recipes. WIP. 
-favorites = []
+
+#
+from supabase_client import supabase
 def save_recipe(meal_id):
+
+    # Get recipe details from TheMealDB API.
     recipe = get_recipe_details(meal_id)
-# This loop checks each saved recipe in the favorites list.
-# If a matching recipe ID is found, the recipe is not saved again.
-    for saved_recipe in favorites:
-        #Compare IDs to prevent duplicate favorites. 
-        if saved_recipe["idMeal"] == recipe ["idMeal"]:
-            return "Oops! Recipe previously saved!"
-    favorites.append(recipe)
+    
+    # First check favorites table to see if the recipe has previously been saved.
+    existing_recipe = (
+        supabase.table("favorites")
+        .select("*")
+        .eq("idMeal", recipe["idMeal"])
+        .execute()
+    )
+
+    # If the system finds a matching meal ID on the database,it won't create a duplicated 
+    # favorite entry. The system will display error message.
+    if existing_recipe.data:
+        return "Oops! Recipe previously saved!"
+    
+    # However, if the meal ID is new in the database, the system will save the recipe information
+    # on the supabase favorites table. 
+    supabase.table("favorites").insert ({
+        "idMeal": recipe["idMeal"],
+        "strMeal": recipe["strMeal"],
+        "strMealThumb": recipe["strMealThumb"],
+        "strArea": recipe ["strArea"]
+    }) .execute()
+    
+    # Successful message will be displayed. 
     return "Recipe saved!"
 
 # ==================================================
@@ -187,8 +207,15 @@ def add_favorites(meal_id):
 
 # Get a feedback message for the user based on the save operation:
 # recipe saved successfully or recipe already exists in favorites.
-# for loop at def save_recipe()
+# for loop at def save_recipe() !!!!
     message = save_recipe(meal_id)
+    
+    response = (
+        supabase.table("favorites")
+        .select("*")
+        .execute()
+    )
+    favorites = response.data
     
     return render_template(
         "favorites.html", 
@@ -196,18 +223,17 @@ def add_favorites(meal_id):
         message=message
         )
     
-    #return render_template("favorites.html")
 
-@app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
-def remove_favorites(meal_id):
-    for recipe in favorites:
-        if recipe ["idMeal"] == str(meal_id):
-            favorites.remove(recipe)
-            break
-    return render_template (
-        "favorites.html",
-        favorites=favorites 
-    )
+#@app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
+#def remove_favorites(meal_id):
+#    for recipe in favorites:
+#        if recipe ["idMeal"] == str(meal_id):
+#            favorites.remove(recipe)
+#            break
+#    return render_template (
+#        "favorites.html",
+#        favorites=favorites 
+#    )
 
 if __name__ == "__main__":
     app.run(debug=True,port=5001)
