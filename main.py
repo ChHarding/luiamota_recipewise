@@ -200,16 +200,27 @@ def recipe_details(meal_id):
 
 # ---------------------------------------------------
 # FAVORITES ROUTE (favorites.html)
-# ---------------------------------------------------
 # Create a route for favorite recipes page where users can view their saved recipes.
+# ---------------------------------------------------
+# Route to the Favorites Page from the Navigation Top Nav Bar. 
+@app.route("/favorites")
+def favorites_page():
+    response = (
+            supabase.table("favorites")
+            .select("*")
+            .execute()
+        )
+    favorites = response.data
+        
+    return render_template(
+        "favorites.html", 
+        favorites=favorites,
+        )
+
+# Route to add recipe to Favorites Table.
 @app.route("/favorites/add/<int:meal_id>", methods=["POST"])
 def add_favorites(meal_id):
-
-# Get a feedback message for the user based on the save operation:
-# recipe saved successfully or recipe already exists in favorites.
-# for loop at def save_recipe() !!!!
     message = save_recipe(meal_id)
-    
     response = (
         supabase.table("favorites")
         .select("*")
@@ -223,17 +234,28 @@ def add_favorites(meal_id):
         message=message
         )
     
-
-#@app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
-#def remove_favorites(meal_id):
-#    for recipe in favorites:
-#        if recipe ["idMeal"] == str(meal_id):
-#            favorites.remove(recipe)
-#            break
-#    return render_template (
-#        "favorites.html",
-#        favorites=favorites 
-#    )
+# Route to remove recipe from Favorites Table.
+@app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
+def remove_favorites(meal_id):
+    # Removing the recipe from Supabase fav table
+    response = (
+        supabase.table("favorites")
+        .delete()
+        .eq("idMeal", str(meal_id))
+        .execute()
+        )
+    
+    response = (
+            supabase.table("favorites")
+            .select("*")
+            .execute()
+        )
+    favorites = response.data
+    
+    return render_template (
+        "favorites.html",
+        favorites=favorites 
+    )
 
 if __name__ == "__main__":
     app.run(debug=True,port=5001)
