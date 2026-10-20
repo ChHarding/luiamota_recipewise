@@ -20,15 +20,25 @@ When a user clicks the Save Recipe button, the application displays:
 <html>
 <header>
     <title>Favorites</title>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
     <a href="/">Home</a> |
     <a href="/favorites">Favorites</a>
 </header>
 <body>
-    <h1>My favorites recipes</h1>
+    <h1>My favorites</h1>
+    <h4> You have {{favorites_count}} recipe(s) saved</h4>
+
     {% if message%}
     <div class="message">
         {{message}}
     </div>
+    {% endif %}
+
+    {% if not favorites %}
+        <h3> No favorites saved yet. </h3>
+        <p> Browse recipes and save your favorites </p>
+        <a href="/">Make a Search</a>
     {% endif %}
 
     {% for recipe in favorites %}

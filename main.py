@@ -211,10 +211,12 @@ def favorites_page():
             .execute()
         )
     favorites = response.data
+    favorites_count = len(favorites)
         
     return render_template(
         "favorites.html", 
         favorites=favorites,
+        favorites_count=favorites_count
         )
 
 # Route to add recipe to Favorites Table.
@@ -227,11 +229,13 @@ def add_favorites(meal_id):
         .execute()
     )
     favorites = response.data
+    favorites_count = len(favorites)
     
     return render_template(
         "favorites.html", 
         favorites=favorites, 
-        message=message
+        message=message,
+        favorites_count=favorites_count
         )
     
 # Route to remove recipe from Favorites Table.
@@ -252,11 +256,13 @@ def remove_favorites(meal_id):
             .execute()
         )
     favorites = response.data
+    favorites_count = len(favorites)
     
     return render_template (
         "favorites.html",
         favorites=favorites, 
-        message=message
+        message=message,
+        favorites_count=favorites_count
     )
 
 if __name__ == "__main__":
