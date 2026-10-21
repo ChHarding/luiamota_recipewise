@@ -4,46 +4,112 @@ body {
     font-family: Alan Sans, sans-serif;
     margin: auto; 
     background-color:#FAFAFC;
+    color 0D1F17; 
     line-height: 1.5;
 }
 
 /* TYPOGRAPHY*/
-
+/* Headings */
 h1 {
-    color 0D1F17; 
     font-size: 36px;
-    font-style: normal;
     font-weight: 600;
     line-height: 40px;
     margin-bottom: 16px;
 }
 
 h2 {
-    color #0D1F17; 
     font-size: 28px;
-    font-style: normal;
     font-weight: 600;
     line-height: 34px;
     margin-bottom: 14px;
 }
 
 h3 {
-    color #0D1F17; 
-    
     font-size: 24px;
-    font-style: normal;
     font-weight: 600;
     line-height: 31px;
     margin-bottom: 12px;
 }
 
 h4{
-    color #0D1F17; 
     font-size: 20px;
-    font-style: normal;
     font-weight: 600;
     line-height: 26px;
     margin-bottom: 10px;
+}
+
+/* Body */
+.body-large{
+    font-size: 18px;
+    line-height: 28px;
+}
+
+.body-medium{
+    font-size: 16px;
+    line-height: 24px;
+
+}
+
+.body-small{
+    font-size: 14px;
+    line-height: 20px;
+}
+/* Font Weight */
+.regular {
+    font-weight: 400;
+}
+
+.semibold {
+    font-weight: 600;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+/* COLORS */
+/* Might need to have a gray scale or at least a darket and lighter versio for text primary*/
+:root {
+    --background-primary: ##FAFAFC;
+    --background-cards: #FFFFFF;
+    --border-light: #E0E0E0;
+    --text-primary: #0D1F17;
+
+   /* Decorative Colors */
+    --primary-color: #104F36 ;
+    --secondary-color: #E05A47 ;
+    --accent-color: #F4A261 ;
+
+    /* Status colors */
+    --background-success: #EEF4E6;
+    --border-success: #9EC36F;
+    --text-success: #1B240F;
+
+    --background-error: #FEF2F0;
+    --border-error: #D72708;
+    --text-error: #450C03;
+
+    --background-alert: #FFF8E5;
+    --borde-alert: #EBAC00;
+    --text-alert: #522D00; 
+}
+
+/* SPACING */
+:root {
+    --space-2xl: 48px;
+    --space-xl: 32px;
+    --space-l: 24px;
+    --space-m: 16px;
+    --space-s: 8px;
+    --space-xs: 4px;
+}
+
+/* BORDER RADIUS */
+:root {
+    --radius-xl: 20px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm:8px;
 }
 
 /* NAVIGATION BAR */
@@ -85,16 +151,22 @@ nav a {
 nav a:hover {
     color: #f1c40f;
 }
+
 /* BUTTONS*/
-button {
+button-primary {
+    background: var(--primary-color);
+    color: white;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    font-family: Alan Sans;
+
     height: 44px;
     padding: 10px 24px;
     justify-content: center;
     align-items: center;
     gap: 8px;
     border-radius: 30px;
-    background: var(--Primary-600, #0C5C72);
-    font-family: Alan Sans;
 }
 
 /* MESSAGES */
