@@ -10,25 +10,41 @@ Serves as the main entry point of RecipeWise.
 ================================================== -->
 
 <!DOCTYPE html>
+
 <html>
-<header>
+<head>
     <title>RecipeWise</title>
     <link rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}">
-</header>
-<body>
+</head>
 
+
+<body> 
     <nav>
         <a href="/">Home</a>
         <a href="/favorites">Favorites</a>
     </nav>
 
-    <h1>Welcome to RecipeWise! WIP</h1>
+    <div class="hero">
+        <img
+            src="{{ url_for('static', filename='logo.svg') }}"
+            alt="RecipeWise Logo"
+            class="logo">
 
-    <form method= "POST">
-        <input type="text" name="recipe_name" placeholder="Search for a recipe">
-        <button type="submit">Search</button>
-    </form>
+        <form class="search-form" method= "POST">
+            <input 
+            type="text" 
+            name="recipe_name" 
+            placeholder="Search for a recipe">
+            
+            <button 
+            type="submit" 
+            class="btn-primary"> 
+            Search 
+            </button>
+        
+        </form>
+    </div>
     
     {% for meal in meals %}
         <div>   

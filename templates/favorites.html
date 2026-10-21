@@ -57,7 +57,7 @@ When a user clicks the Save Recipe button, the application displays:
             <p><b>Country:</b> {{recipe["strArea"]}}</p>
         </div>
         <form action="/favorites/remove//{{recipe["idMeal"]}}" method="POST">
-        <button type="submit">Remove from Favorites</button>
+        <button type="submit" class="btn-destructive"> Remove from Favorites </button>
     </form>
         <hr>
     {% endfor %}
