@@ -15,13 +15,18 @@ This page displays:
 <html>
 <header>
     <title>Recipe Details</title>
-    <a href="/">Home</a> |
-    <a href="/favorites">Favorites</a>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
 </header>
+
 <body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/favorites">Favorites</a>
+    </nav>
+
     <h1>Recipe Details Page</h1>
     <h2> Recipe: {{recipe["strMeal"]}} </h2>
-    <p> Recipe Name/ID: {{ recipe["idMeal"] }} </p>
     <form action="/favorites/add//{{recipe["idMeal"]}}" method="POST">
         <button type="submit">Add to Favorites</button>
     </form>

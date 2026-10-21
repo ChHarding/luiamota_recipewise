@@ -22,10 +22,15 @@ When a user clicks the Save Recipe button, the application displays:
     <title>Favorites</title>
     <link rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}">
-    <a href="/">Home</a> |
-    <a href="/favorites">Favorites</a>
+    
 </header>
+
 <body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/favorites">Favorites</a>
+    </nav>
+
     <h1>My favorites</h1>
     <h4> You have {{favorites_count}} recipe(s) saved</h4>
 
