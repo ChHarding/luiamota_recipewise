@@ -21,8 +21,21 @@ Serves as the main entry point of RecipeWise.
 
 <body> 
     <nav>
-        <a href="/">Home</a>
-        <a href="/favorites">Favorites</a>
+        <div class="nav-container">
+            <a href="/" class="nav-logo-link">
+                <img
+                    src="{{ url_for('static', filename='logo.svg') }}"
+                    alt="RecipeWise"
+                    class="nav-logo">
+            </a>
+            <a href="/favorites" class="nav-link">
+                <img
+                    src="{{ url_for('static', filename='heart-full.svg')}}"
+                    alt= "Favorites"
+                    class = "nav-icon">
+                Favorites
+            </a>
+        </div>
     </nav>
 
     <div class="hero">
@@ -50,7 +63,7 @@ Serves as the main entry point of RecipeWise.
     </div>
     
     {% for meal in meals %}
-        <div>   
+        <div class="recipe-card">   
             <h3>
                 <a href="/recipe/{{meal["idMeal"]}}">
                     {{meal["strMeal"]}}
@@ -58,8 +71,15 @@ Serves as the main entry point of RecipeWise.
             </h3>
             <img src="{{meal["strMealThumb"]}}" alt="{{meal["strMeal"]}}" width="200">
             <p> <b>Country:</b> {{meal["strArea"]}} </p>
+            
+            <button class="btn-primary" type="submit" > 
+             <img 
+                src = "{{ url_for ('static', filename='heart-empty.svg')}}"
+                alt=" "
+                class="button-icon">
+                Add to Favorites 
+            </button>
         </div>
-         <hr>
     {% endfor %}    
 
 </body>

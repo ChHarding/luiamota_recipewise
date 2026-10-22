@@ -93,29 +93,31 @@ body {
     --gray-0: #FFFFFF;
 
    /* Decorative Colors */
-    --primary-600:;
+    --primary-800:#092A1D;
+    --primary-600:#22AA74;
     --primary-400: #104F36 ;
-    --primary-200:;
+    --primary-200: #AAEED3;
     
-    --secondary-600:;
+    --secondary-600:#AF2F1D;
     --secondary-400: #E05A47 ;
-    --secondary-200: ; 
+    --secondary-200: #F0B1A8; 
     
     --accent-color: #F4A261 ;
 
     /* Status colors */
-    --background-success: #EEF4E6;
-    --border-success: #9EC36F;
-    --text-success: #1B240F;
+    --success-800: #1B240F;
+    --success-400:#9EC36F;
+    --success-50: #EEF4E6;
+   
+    --error-800: #450C03;
+    --error-600: #761504;
+    --error-500: #A71E06;
+    --error-400: #D72708;
+    --error-50: #FEF2F0;
 
-    --background-error: #FEF2F0;
-    --border-error: #D72708;
-    --text-error: #450C03;
-    --background-btn: #A71E06;
-
-    --background-alert: #FFF8E5;
-    --borde-alert: #EBAC00;
-    --text-alert: #522D00; 
+    --alert-800: #522D00; 
+    --alert-400: #EBAC00;
+    --alert-50: #FFF8E5;
 }
 
 /* SPACING */
@@ -138,49 +140,77 @@ body {
 }
 
 /* NAVIGATION BAR */
-nav {
+ nav {
     /*Keep the top-nav bar stick on top when the user scrolls. 
     Keeping the top-nav bar always visible (better ux)*/
     position: sticky;
-    top:0;
+    top: 0;
     z-index: 1000;
-    
-    /* Glass effect */
-    background: F2F2F2;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    
-    /* Bottom border */
-    border-bottom: 1px solid gray;
-
-    padding: 30px;
-    margin-bottom: 20px;
     width: 100%;
 
-}
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
+    border-bottom: 0.5px solid var(--gray-200);
+    box-shadow: 0 2px 8px #262829(0, 0, 0, 0.04);
+}
 .nav-container {
-    max-width: 1000px;
-    margin: auto;
-    padding 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 64px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
 }
 
 nav a {
-    color: black;
+    color: var(--primary-800);
+
     text-decoration: none;
-    margin-right: 20px;
-    font-weight: regular;
-    
+
+    font-size: var(--body-medium-size);
+    font-weight: var(--weight-semibold);
+
+    transition: 0.2s ease;
 }
 
-nav a:hover {
-    color: #f1c40f;
+nav a:hover{
+    color: var(--secondary-400);
 }
+.nav-link-active {
+    color: var(--secondary-400);
+}
+
+.nav-logo{
+    height: 40px;
+    width: auto;
+}
+.nav-logo:hover {
+    transform: scale(1.03);
+}
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+} 
+.nav-link:hover .nav-icon {
+    transform: scale(1.1);
+    color: var(--secondary-400);
+}
+
 
 /* BUTTONS*/
 .btn-primary {
     background: var(--primary-400);
-    color: var(--background-error);
+    color: var(--gray-0);
     font-size: var(--body-medium-size);
     line-height: var(--body-medium-line-height);
     font-weight: var(--weight-regular);
@@ -199,11 +229,11 @@ nav a:hover {
     box-shadow: none;
 }
 .btn-primary:hover {
-    background: var(--secondary-400);
+    background: var(--primary-800);
 }
 
 .btn-destructive {
-    background: var(--background-btn);
+    background: var(--error-400);
     color: var(--gray-0);
     font-size: var(--body-medium-size);
     line-height: var(--body-medium-line-height);
@@ -222,9 +252,20 @@ nav a:hover {
     outline: none;
     box-shadow: none;
 }
-
+.btn-destructive:hover {
+    background: var(--error-500);
+}
 .button-icon {
     width: 20px;
     height: 20px;
 }
 /* MESSAGES */
+
+/* RECIPE CARDS*/
+.recipe-card {
+    background-color: var(--background-cards);
+    border-radius: var(--radius-md);
+    padding: var(--space-l);
+    border:1px solid var(--gray-400);
+    margin-bottom: var(--space-l); 
+}

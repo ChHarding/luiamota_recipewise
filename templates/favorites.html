@@ -16,19 +16,31 @@ When a user clicks the Save Recipe button, the application displays:
 ================================================== -->
 
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
-<header>
+<head>
     <title>Favorites</title>
     <link rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}">
     
-</header>
+</head>
 
-<body>
+<body> 
     <nav>
-        <a href="/">Home</a>
-        <a href="/favorites">Favorites</a>
+       <div class="nav-container">
+            <a href="/" class="nav-logo-link">
+                <img
+                    src="{{ url_for('static', filename='logo.svg') }}"
+                    alt="RecipeWise"
+                    class="nav-logo">
+            </a>
+            <a href="/favorites" class="nav-link nav-link-active">
+                <img
+                    src="{{ url_for('static', filename='heart-full.svg')}}"
+                    alt= "Favorites"
+                    class = "nav-icon">
+                Favorites
+            </a>
+        </div>
     </nav>
 
     <h1>My favorites</h1>
@@ -47,7 +59,7 @@ When a user clicks the Save Recipe button, the application displays:
     {% endif %}
 
     {% for recipe in favorites %}
-        <div>
+        <div class="recipe-card">
             <h3>
                 <a href="/recipe/{{recipe["idMeal"]}}">
                     {{recipe["strMeal"]}} 
@@ -65,7 +77,6 @@ When a user clicks the Save Recipe button, the application displays:
             Remove from Favorites 
         </button>
     </form>
-        <hr>
     {% endfor %}
     
 </body>
