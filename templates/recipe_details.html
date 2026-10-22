@@ -1,21 +1,69 @@
+<!-- ==================================================
+RECIPE DETAILS PAGE
+
+Purpose:
+Displays detailed information of a selected recipe.
+This page displays: 
+- Recipe name
+- Recipe image
+- Recipe ingridients and measurments make_list
+- Recipe instrunctions 
+- Save Button (this feature allows users to save a recipe to their fav list)
+
+================================================== -->
 <!DOCTYPE html>
 <html>
 <header>
     <title>Recipe Details</title>
-    <a href="/">Home</a> |
-    <a href="/favorites">Favorites</a>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
 </header>
-<body>
+
+<body> 
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-logo-link">
+                <img
+                    src="{{ url_for('static', filename='logo.svg') }}"
+                    alt="RecipeWise"
+                    class="nav-logo">
+            </a>
+           <a href="/favorites" class="nav-link">
+                <img
+                    src="{{ url_for('static', filename='heart-full.svg')}}"
+                    alt= "Favorites"
+                    class = "nav-icon">
+                Favorites
+            </a>
+    </nav>
+
+
     <h1>Recipe Details Page</h1>
-    <p>This page will display detailed information about a specific recipe.</p>
     <h2> Recipe: {{recipe["strMeal"]}} </h2>
-    <p> Recipe Name/ID: {{ recipe["idMeal"] }} </p>
-    <p> Image here: </p>
+    <form action="/favorites/add//{{recipe["idMeal"]}}" method="POST">
+        <button class="btn-primary" type="submit" > 
+             <img 
+                src = "{{ url_for ('static', filename='heart-empty.svg')}}"
+                alt=" "
+                class="button-icon">
+            Add to Favorites 
+        </button>
+    </form>
+    
     <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
-    <p>Ingredients here: Still WIP </p>
-    <p>Instructions here: Still WIP
-        {{ recipe["strInstructions"] }}
-    </p>
-    <!-- Recipe details will be displayed here -->
+    <h3>Ingredients:</h3>
+    <ul>
+        {% for ingredient in ingredients %}
+            <li>{{ ingredient }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Instructions:</h3>
+        <ul>
+        {% for step in instructions %}
+            <li>{{ step }}</li>
+        {% endfor %}
+        </ul>
+   
 </body>
 </html>

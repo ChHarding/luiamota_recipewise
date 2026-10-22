@@ -1,14 +1,83 @@
-<!DOCTYPE html>
+<!-- ==================================================
+FAVORITES PAGE
+
+Purpose:
+Displays all recipes saved by the user. Each recipe includes:
+- Recipe Name
+- Recipe Image
+- Country of origin.
+
+Users can click a recipe name to navigate back to the Recipe Details page.
+
+Feedback:
+When a user clicks the Save Recipe button, the application displays:
+- A success message when the recipe is saved successfully
+- An error message when the recipe has already been saved
+================================================== -->
+
 <!DOCTYPE html>
 <html>
-<header>
+<head>
     <title>Favorites</title>
-    <a href="/">Home</a> |
-    <a href="/favorites">Favorites</a>
-</header>
-<body>
-    <h1>My favorites recipes</h1>
-    <h3>No Favorites yet!</h3>
-    <p>This page will display the user's favorite recipes.</p>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+    
+</head>
+
+<body> 
+    <nav>
+       <div class="nav-container">
+            <a href="/" class="nav-logo-link">
+                <img
+                    src="{{ url_for('static', filename='logo.svg') }}"
+                    alt="RecipeWise"
+                    class="nav-logo">
+            </a>
+            <a href="/favorites" class="nav-link nav-link-active">
+                <img
+                    src="{{ url_for('static', filename='heart-full.svg')}}"
+                    alt= "Favorites"
+                    class = "nav-icon">
+                Favorites
+            </a>
+        </div>
+    </nav>
+
+    <h1>My favorites</h1>
+    <h4> You have {{favorites_count}} recipe(s) saved</h4>
+
+    {% if message%}
+    <div class="message">
+        {{message}}
+    </div>
+    {% endif %}
+
+    {% if not favorites %}
+        <h3> No favorites saved yet. </h3>
+        <p> Browse recipes and save your favorites </p>
+        <a href="/">Make a Search</a>
+    {% endif %}
+
+    {% for recipe in favorites %}
+        <div class="recipe-card">
+            <h3>
+                <a href="/recipe/{{recipe["idMeal"]}}">
+                    {{recipe["strMeal"]}} 
+                </a>
+            </h3>
+            <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
+            <p><b>Country:</b> {{recipe["strArea"]}}</p>
+        </div>
+        <form action="/favorites/remove//{{recipe["idMeal"]}}" method="POST">
+        <button class="btn-destructive" type="submit" > 
+             <img 
+                src = "{{ url_for ('static', filename='delete.svg')}}"
+                alt=" "
+                class="button-icon">
+            Remove from Favorites 
+        </button>
+    </form>
+    {% endfor %}
+    
 </body>
 </html>
