@@ -25,7 +25,13 @@ When a user clicks the Save Recipe button, the application displays:
 </head>
 
 <body> 
-<!-- Top Navigation Bar--> 
+<!--  ======================================================
+  TOP NAVIGATION BAR
+  This section contains the top navigation bar of the website.
+  - Logo: Clicking on the logo redirects users to the homepage.
+  - Favorites Link: Clicking on the "Favorites" link redirects users to the favorites page.
+
+======================================================== --> 
     <nav>
        <div class="nav-container">
             <a href="/" class="nav-logo-link">
@@ -44,7 +50,14 @@ When a user clicks the Save Recipe button, the application displays:
         </div>
     </nav>
 
-<!-- Page Content -->   
+<!-- ======================================================
+ HERO SECTION 
+ This section contains the hero section of the favorites page.
+    - Displays the number of recipes saved by the user
+    - Displays a success or error message when a user clicks 
+    the Save Recipe button on the Recipe Details page
+    - Displays a message when no recipes have been saved yet (UPCOMING FEATURE)
+ ====================================================== --> 
     <main class= "page-container">
             <h1>My favorites</h1>
             <h4> You have {{favorites_count}} recipe(s) saved</h4>

@@ -18,7 +18,13 @@ Serves as the main entry point of RecipeWise.
       href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<!-- Top Navigation Bar--> 
+<!--  ======================================================
+  TOP NAVIGATION BAR
+  This section contains the top navigation bar of the website.
+  - Logo: Clicking on the logo redirects users to the homepage.
+  - Favorites Link: Clicking on the "Favorites" link redirects users to the favorites page.
+
+======================================================== --> 
 <body> 
     <nav>
         <div class="nav-container">
@@ -37,7 +43,15 @@ Serves as the main entry point of RecipeWise.
         </div>
     </nav>
 
-<!-- Page Content -->  
+<!-- ======================================================
+ HERO SECTION 
+ This section contains the hero section of the homepage.
+    - Displays the RecipeWise logo
+    - Displays a search bar for users to enter a recipe name
+    - Displays a search button to submit the search query
+    - Displays the number of matching recipes found
+    - Displays a grid of clikable recipe cards with recipe images, names, and country of origin
+ ====================================================== --> 
     <main class="page-container">
         <div class="hero {% if recipe_count > 0 %}hero-results{% endif %}"> <!-- AI Assistance -->
             {% if not meals %}
@@ -67,12 +81,21 @@ Serves as the main entry point of RecipeWise.
             {% if recipe_count > 0 %}
                 <p class = "results-count">
                     {{ recipe_count }} matching recipes found containing "{{ recipe_name }}".
+                      <!-- ==================================================
+                           This section displays the number of matching recipes 
+                           found containing the search query entered by the user.
+                        ================================================== -->
                 </p>
             {% endif%}
             <div class="recipe-grid"> 
                     {% for meal in meals %}
                         <!-- ==================================================
-                            Add note AI assistance  
+                            This section displays a grid of clickable recipe cards 
+                            with recipe images, names, and country of origin.
+                            
+                            AI assistance was needed to understand and create clikable
+                            recipe cards, while having the Favorite button on the card,
+                            which is also clikable. 
                         ================================================== -->
                         <div class="recipe-card">
                             <a href="/recipe/{{meal['idMeal']}}" class="card-link"></a>

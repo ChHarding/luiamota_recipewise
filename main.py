@@ -26,6 +26,8 @@ app = Flask(__name__)
 #   - Recipe name
 #   - Recipe image
 #   - Recipe country of origin
+# - Added clicklable recipe cards to edirect users to the Recipes Detail Page. 
+# - Added a Favorites button to allow users to save recipes directly from the search results page. 
 # ---------------------------------------------------
 
 def search_recipes(recipe_name):
@@ -70,31 +72,35 @@ def get_recipe_details(meal_id):
     return data["meals"][0]
 
 # ==================================================
-# BLOCK 3: SAVE RECIPES
+# BLOCK 3: FAVORITES
 # ==================================================
 # Functionality:
-# - Save selected recipe
-# - Store recipe information
-# - Manage favorite recipes
+# - Save selected recipes.
+# - Store recipe information in Supabase.
+# - Prevent duplicate saves.
+# - Manage favorite recipes.
 #
 #  What's new in this version:
-# - Created a temporary favorites list to store saved recipes
-# - Connected the Save Recipe button to the Favorites workflow
+# - Connected the Save Recipe button to the Favorites workflow.
 # - Displayed saved recipes on the Favorites page. Each recipe mantains the same style
-#   as the search result list (recipe name, image and country of origin)
-# - Added clickable recipe names that redirect users to the Recipe Details page
+#   as the search result list (recipe name, image and country of origin).
+# - Connected Supabase to store recipe information in a database table. 
+# - Added clickable recipe cards that redirect users to the Recipe Details page
 # - Added success and duplicate-save feedback messages
-
 # ---------------------------------------------------
-
-#
+#  3.1 SUPABASE INTEGRATION
+# ---------------------------------------------------
+# - Recipe data is stored in Supabase favorites table. 
+# - Before saving a recipe, the system checks wether the recipe already exists.
+# ---------------------------------------------------
+# Importing Supabase client
 from supabase_client import supabase
 def save_recipe(meal_id):
 
-    # Get recipe details from TheMealDB API.
+    # Retrieve recipe details from TheMealDB API.
     recipe = get_recipe_details(meal_id)
     
-    # First check favorites table to see if the recipe has previously been saved.
+    # Check the Supabase favorites table to determine whether the recipe has already been saved. 
     existing_recipe = (
         supabase.table("favorites")
         .select("*")
@@ -102,15 +108,16 @@ def save_recipe(meal_id):
         .execute()
     )
 
-    # If the system finds a matching meal ID on the database,it won't create a duplicated 
-    # favorite entry. The system will display error message.
+    # If matching meal ID is found in the database, a duplicated 
+    # favorite entry will not be created. 
+    # The system will display warning message. 
     if existing_recipe.data:
         return ( 
                 "Recipe is already in your favorites.",
                 "warning")
     
-    # However, if the meal ID is new in the database, the system will save the recipe information
-    # on the supabase favorites table. 
+    # If the recipe has not been saved before,
+    # its information is stored in the Supabase favorites table.
     supabase.table("favorites").insert ({
         "idMeal": recipe["idMeal"],
         "strMeal": recipe["strMeal"],
@@ -118,25 +125,13 @@ def save_recipe(meal_id):
         "strArea": recipe ["strArea"]
     }) .execute()
     
-    # Successful message will be displayed. 
+    # A successful message will be displayed after the recipe is saved.
     return (
         "Recipe saved successfully.",
         "success"
     )
 
-# ==================================================
-# BLOCK 4: VIEW SAVED RECIPES
-# ==================================================
-# Functionality:
-# - Retrieve saved recipes
-# - Display saved recipes
-# - Refresh recipe information if needed
-#
-#  What's new in this version:
-# ---------------------------------------------------
 
-def get_saved_recipes():
-    pass
 
 # ==================================================
 # FLASK ROUTES
@@ -148,34 +143,40 @@ def get_saved_recipes():
 # - Recipe details page (recipe_details.html)
 # - Favorite recipes page (favorites.html)
 # ---------------------------------------------------
-
+#
+#
 # ---------------------------------------------------
-# HOME PAGE ROUTE (index.html)
+# 1 HOME PAGE ROUTE (index.html)
 # ---------------------------------------------------
 # Create a route for the home page where users can search for recipes
 @app.route("/", methods=["GET", "POST"])
 def home():
-    meals = []
-    recipe_count = 0 
-    recipe_name = ""
+    # Initialize default values before the search: 
+    meals = [] # Stores matching results from the API
+    recipe_count = 0 # Recipe's counter
+    recipe_name = "" # Stores user's search query. 
     
     if request.method == "POST":
+        # Get the recipe name from the search form submitted by the user
         recipe_name = request.form["recipe_name"] 
-            
-        print(f"Searching for recipes matching: {recipe_name}")
-        
-        meals = search_recipes(recipe_name)
-        recipe_count = len(meals)
+        # Call the search_recipes function to get matching recipes from TheMealDB API
+        meals = search_recipes(recipe_name) 
+        # Count the number of matching recipes found to display on the home page.
+        recipe_count = len(meals) 
     
+    # Retrieve the list of favorite recipes from Supabase to display on the home page.
     favorites_recipes = (
         supabase.table ("favorites")
         .select("idMeal")
         .execute ()
     )
+    # Create a set of favorite recipe IDs to idenrify
+    # which recipes have already been saved as favorites. 
     favorites_ids = {
         recipe ["idMeal"]
         for recipe in favorites_recipes.data
     }
+    # Pass the data to the index.html template to be rendered on the home page.
     return render_template(
         "index.html", 
         meals=meals,
@@ -183,8 +184,9 @@ def home():
         recipe_name=recipe_name,
         favorites_ids=favorites_ids
     )
+
 # ---------------------------------------------------
-# RECIPE DETAILS ROUTE (recipe_details.html)
+# 2 RECIPE DETAILS ROUTE (recipe_details.html)
 # ---------------------------------------------------
 # Create a route for the recipe details page where users can view the details of a selected recipe.
 @app.route("/recipe/<int:meal_id>")
@@ -205,24 +207,28 @@ def recipe_details(meal_id):
             
     # Extract ingredients and their measurements from the recipe details
     ingredients = []
-    #Loop through the possible ingredient and measurement fields
-    # TheMealDB API has up to 20 ingredients (that's why we loop from 1 to 21. Needed help with this part from AI)
+    # Loop through the possible ingredient and measurement fields
+    # TheMealDB API has up to 20 ingredients (that's why we loop from 1 to 21. 
+    # Needed help with this part from AI)
     for i in range(1, 21):
         ingredient = recipe.get(f"strIngredient{i}")
         measure = recipe.get(f"strMeasure{i}")
         # Only add the ingredient if it is not empty
         if ingredient and ingredient.strip():
             ingredients.append(f"{measure} {ingredient}")
-    #
+    # Retrieve the list of favorite recipes from Supabase to display on the recipe details page.
     favorite_recipes = (
         supabase.table("favorites")
         .select ("idMeal")
         .execute()
     )
+    # Create a set of favorite recipe IDs to identify 
+    # which recipes have already been saved as favorites.
     favorite_ids = {
         str(recipe["idMeal"])
         for recipe in favorite_recipes.data
     }
+    # Pass the data to the recipe_details.html template to be rendered on the recipe details page.
     return render_template(
         "recipe_details.html", 
         recipe=recipe, 
@@ -232,10 +238,12 @@ def recipe_details(meal_id):
         )
 
 # ---------------------------------------------------
-# FAVORITES ROUTE (favorites.html)
+# 3 FAVORITES ROUTE (favorites.html)
 # Create a route for favorite recipes page where users can view their saved recipes.
 # ---------------------------------------------------
-# Route to the Favorites Page from the Navigation Top Nav Bar. 
+#
+# ////////////////////////////////////////////////////
+# 3.1 ROUTE: to the Favorites Page from the Navigation Top Nav Bar. 
 @app.route("/favorites")
 def favorites_page():
     response = (
@@ -243,27 +251,37 @@ def favorites_page():
             .select("*")
             .execute()
         )
+    # Retrieve the list of favorite recipes from Supabase to display on the favorites page.
     favorites = response.data
+    # Count the number of favorite recipes to display on the favorites page.
     favorites_count = len(favorites)
-       
+    
+    # Pass the data to the favorites.html template to be rendered on the favorites page.
     return render_template(
         "favorites.html", 
         favorites=favorites,
         favorites_count=favorites_count
         )
 
-# Route to add recipe to Favorites Table.
+# //////////////////////////////////////////////////
+# 3.2 ROUTE: Adding a new recipe to the Supabase Favorites Table.
 @app.route("/favorites/add/<int:meal_id>", methods=["POST"])
 def add_favorites(meal_id):
+    # Message and message_type are returned from the save_recipe function to provide feedback to the user.
+    # In this case a success message will be displayed if the recipe is saved successfully,
+    # or a warning message will be displayed if the recipe is already in the favorites.
     message, message_type = save_recipe(meal_id)
     response = (
         supabase.table("favorites")
         .select("*")
         .execute()
     )
+    # Retrieve the list of favorite recipes from Supabase to display on the favorites page.
     favorites = response.data
+    # Count the number of favorite recipes to display on the favorites page.
     favorites_count = len(favorites)
     
+    # Pass the data to the favorites.html template to be rendered on the favorites page.
     return render_template(
         "favorites.html", 
         favorites=favorites, 
@@ -272,9 +290,12 @@ def add_favorites(meal_id):
         message_type=message_type
         )
     
-# Route to remove recipe from Favorites Table.
+# /////////////////////////////////////////////////////// 
+# 3.3 ROUTE: Removing a recipe from the Supabase Favorites Table.
 @app.route("/favorites/remove/<int:meal_id>", methods=["POST"])
 def remove_favorites(meal_id):
+    # Message and message_type are returned to provide feedback to the user.
+    # In this case a success message will be displayed if the recipe is removed successfully.
     message = "Recipe removed successfully."
     message_type = "success"
     # Removing the recipe from Supabase fav table
@@ -289,9 +310,12 @@ def remove_favorites(meal_id):
             .select("*")
             .execute()
         )
+    # Retrieve the list of favorite recipes from Supabase to display on the favorites page.
     favorites = response.data
+    # Count the number of favorite recipes to display on the favorites page.
     favorites_count = len(favorites)
-    
+   
+    # Pass the data to the favorites.html template to be rendered on the favorites page.
     return render_template (
         "favorites.html",
         favorites=favorites, 

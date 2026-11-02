@@ -6,8 +6,8 @@ Displays detailed information of a selected recipe.
 This page displays: 
 - Recipe name
 - Recipe image
-- Recipe ingridients and measurments make_list
-- Recipe instrunctions 
+- Recipe ingredients and measurements list
+- Recipe instructions
 - Save Button (this feature allows users to save a recipe to their fav list)
 
 ================================================== -->
@@ -21,7 +21,13 @@ This page displays:
 </header>
 
 <body> 
-<!-- Top Navigation Bar--> 
+<!--  ======================================================
+  TOP NAVIGATION BAR
+  This section contains the top navigation bar of the website.
+  - Logo: Clicking on the logo redirects users to the homepage.
+  - Favorites Link: Clicking on the "Favorites" link redirects users to the favorites page.
+
+======================================================== --> 
     <nav>
         <div class="nav-container">
             <a href="/" class="nav-logo-link">
@@ -38,7 +44,16 @@ This page displays:
             </a>
     </nav>
     
-<!-- Page Content --> 
+<!-- ======================================================
+ HERO SECTION 
+ This section contains the hero section of the recipe details page.
+ - Recipe Image
+ - Recipe Name
+ - Recipe Country of Origin
+ - Save Button (this feature allows users to save a recipe to their fav list)
+ - Ingredients and measurements list
+ - Instructions list
+ ====================================================== --> 
     <main class= "page-container">
             <div class="recipe-layout">
                 <div class="recipe-media">
@@ -82,8 +97,7 @@ This page displays:
                     </form>
             </div>
             
-            <h3> Ingridients: </h3>
-
+            <h3> Ingredients: </h3>
             <ul>
                 {% for ingredient in ingredients %}
                     <li>{{ ingredient }}</li>
