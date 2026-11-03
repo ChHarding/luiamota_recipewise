@@ -25,6 +25,13 @@ When a user clicks the Save Recipe button, the application displays:
 </head>
 
 <body> 
+<!--  ======================================================
+  TOP NAVIGATION BAR
+  This section contains the top navigation bar of the website.
+  - Logo: Clicking on the logo redirects users to the homepage.
+  - Favorites Link: Clicking on the "Favorites" link redirects users to the favorites page.
+
+======================================================== --> 
     <nav>
        <div class="nav-container">
             <a href="/" class="nav-logo-link">
@@ -34,50 +41,73 @@ When a user clicks the Save Recipe button, the application displays:
                     class="nav-logo">
             </a>
             <a href="/favorites" class="nav-link nav-link-active">
-                <img
-                    src="{{ url_for('static', filename='heart-full.svg')}}"
-                    alt= "Favorites"
-                    class = "nav-icon">
+                 <svg class="nav-icon" viewBox="0 -960 960 960">
+                    <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+                </svg>
+
                 Favorites
             </a>
         </div>
     </nav>
 
-    <h1>My favorites</h1>
-    <h4> You have {{favorites_count}} recipe(s) saved</h4>
+<!-- ======================================================
+ HERO SECTION 
+ This section contains the hero section of the favorites page.
+    - Displays the number of recipes saved by the user
+    - Displays a success or error message when a user clicks 
+    the Save Recipe button on the Recipe Details page
+    - Displays a message when no recipes have been saved yet (UPCOMING FEATURE)
+ ====================================================== --> 
+    <main class= "page-container">
+            <h1>My favorites</h1>
+            <h4> You have {{favorites_count}} recipe(s) saved</h4>
 
-    {% if message%}
-    <div class="message">
-        {{message}}
-    </div>
-    {% endif %}
+            {% if message%}
+            <div class="notification notification-{{ message_type }}">
+                <img 
+                src="{{ url_for('static', filename=message_type ~ '.svg') }}"
+                alt=""
+                class="notification-icon">
+                <span>
+                {{message}}
+                </span>
+            </div>
+            {% endif %}
 
-    {% if not favorites %}
-        <h3> No favorites saved yet. </h3>
-        <p> Browse recipes and save your favorites </p>
-        <a href="/">Make a Search</a>
-    {% endif %}
+            {% if not favorites %}
+                <h3> No favorites saved yet. </h3>
+                <p> Browse recipes and save your favorites </p>
+                <a href="/">Make a Search</a>
+            {% endif %}
 
-    {% for recipe in favorites %}
-        <div class="recipe-card">
-            <h3>
-                <a href="/recipe/{{recipe["idMeal"]}}">
-                    {{recipe["strMeal"]}} 
-                </a>
-            </h3>
-            <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
-            <p><b>Country:</b> {{recipe["strArea"]}}</p>
-        </div>
-        <form action="/favorites/remove//{{recipe["idMeal"]}}" method="POST">
-        <button class="btn-destructive" type="submit" > 
-             <img 
-                src = "{{ url_for ('static', filename='delete.svg')}}"
-                alt=" "
-                class="button-icon">
-            Remove from Favorites 
-        </button>
-    </form>
-    {% endfor %}
-    
+            <div class="recipe-grid"> 
+                {% for meal in favorites %}
+                    <div class="recipe-card">
+                        <a href="/recipe/{{meal['idMeal']}}" class="card-link"></a>
+
+                        <div class="recipe-image-container">
+                            <img src="{{meal["strMealThumb"]}}" alt="{{meal["strMeal"]}}" width="200">
+                        </div>
+                        <form action="/favorites/remove/{{ meal ['idMeal'] }}" method = "POST">
+                            <button class="favorite-btn" type="submit" > 
+                                    <img 
+                                        src = "{{ url_for ('static', filename='heart-full-red.svg')}}"
+                                        alt=" Favorited">
+                            </button>
+                        </form>
+
+                        <div class="recipe-content">
+                            <h2 class="recipe-title">
+                                {{meal["strMeal"]}}
+                            </h2>
+
+                            <p class="recipe-country">
+                                <b> {{meal["strArea"]}} </b>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+    </main>
 </body>
 </html>

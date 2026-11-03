@@ -6,13 +6,14 @@ Displays detailed information of a selected recipe.
 This page displays: 
 - Recipe name
 - Recipe image
-- Recipe ingridients and measurments make_list
-- Recipe instrunctions 
+- Recipe ingredients and measurements list
+- Recipe instructions
 - Save Button (this feature allows users to save a recipe to their fav list)
 
 ================================================== -->
 <!DOCTYPE html>
 <html>
+
 <header>
     <title>Recipe Details</title>
     <link rel="stylesheet"
@@ -20,6 +21,13 @@ This page displays:
 </header>
 
 <body> 
+<!--  ======================================================
+  TOP NAVIGATION BAR
+  This section contains the top navigation bar of the website.
+  - Logo: Clicking on the logo redirects users to the homepage.
+  - Favorites Link: Clicking on the "Favorites" link redirects users to the favorites page.
+
+======================================================== --> 
     <nav>
         <div class="nav-container">
             <a href="/" class="nav-logo-link">
@@ -29,41 +37,83 @@ This page displays:
                     class="nav-logo">
             </a>
            <a href="/favorites" class="nav-link">
-                <img
-                    src="{{ url_for('static', filename='heart-full.svg')}}"
-                    alt= "Favorites"
-                    class = "nav-icon">
+                <svg class="nav-icon" viewBox="0 -960 960 960">
+                    <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
+                </svg>
                 Favorites
             </a>
     </nav>
-
-
-    <h1>Recipe Details Page</h1>
-    <h2> Recipe: {{recipe["strMeal"]}} </h2>
-    <form action="/favorites/add//{{recipe["idMeal"]}}" method="POST">
-        <button class="btn-primary" type="submit" > 
-             <img 
-                src = "{{ url_for ('static', filename='heart-empty.svg')}}"
-                alt=" "
-                class="button-icon">
-            Add to Favorites 
-        </button>
-    </form>
     
-    <img src="{{recipe["strMealThumb"]}}" alt="{{recipe["strMeal"]}}" width="200">
-    <h3>Ingredients:</h3>
-    <ul>
-        {% for ingredient in ingredients %}
-            <li>{{ ingredient }}</li>
-        {% endfor %}
-    </ul>
+<!-- ======================================================
+ HERO SECTION 
+ This section contains the hero section of the recipe details page.
+ - Recipe Image
+ - Recipe Name
+ - Recipe Country of Origin
+ - Save Button (this feature allows users to save a recipe to their fav list)
+ - Ingredients and measurements list
+ - Instructions list
+ ====================================================== --> 
+    <main class= "page-container">
+            <div class="recipe-layout">
+                <div class="recipe-media">
+                    <img 
+                        src="{{recipe["strMealThumb"]}}" 
+                        alt="{{recipe["strMeal"]}}" 
+                        class="recipe-detail-image">
+                </div>
 
-    <h3>Instructions:</h3>
-        <ul>
-        {% for step in instructions %}
-            <li>{{ step }}</li>
-        {% endfor %}
-        </ul>
-   
+                <div class="recipe-info">
+                    <div class="recipe-header">
+
+                        <div class="recipe-meta">
+                            <h1> {{ recipe["strMeal"]}}</h1>
+                            <h2 class="recipe-country">
+                                {{ recipe ["strArea"]}}
+                            </h2>
+                        </div>    
+                    <form action="/favorites/add//{{recipe['idMeal']}}" method="POST">
+                            {% if recipe ['idMeal'] in favorite_ids %}
+                                <button class="btn-primary" type="submit">
+                                <img
+                                    src = "{{ url_for ('static', filename='heart-full-red.svg')}}"
+                                    alt="Favorited"
+                                    class="button-icon">
+                                Saved in Favorites
+                            {% else %}
+                                <button class="btn-secondary" type="submit">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="32px"
+                                    viewBox="0 -960 960 960"
+                                    width="32px"
+                                    fill="currentColor">
+                                    <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
+                                </svg>
+                                    Add to Favorites
+                            {% endif %}
+
+                        </button>
+                    </form>
+            </div>
+            
+            <h3> Ingredients: </h3>
+            <ul>
+                {% for ingredient in ingredients %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+            
+            <div class="recipe-instructions">
+                <h2>Instructions:</h2>
+                    <ul>
+                        {% for step in instructions %}
+                            <li>{{ step }}</li>
+                        {% endfor %}
+                    </ul>
+             </div>
+    </main>
+
 </body>
 </html>
