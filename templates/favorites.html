@@ -72,12 +72,35 @@ When a user clicks the Save Recipe button, the application displays:
                 {{message}}
                 </span>
             </div>
+            <script>
+                setTimeout(() => {
+                    const notification = document.querySelector('.notification');
+                    if (notification) {
+                            notification.style.opacity = '0';
+                            setTimeout(() => {
+                                notification.remove();
+                        }, 300);
+                    }
+                }, 3000);
+            </script>
             {% endif %}
 
             {% if not favorites %}
-                <h3> No favorites saved yet. </h3>
-                <p> Browse recipes and save your favorites </p>
-                <a href="/">Make a Search</a>
+                <div class="empty-favorites">
+                    <img 
+                        src="{{ url_for('static', filename='no-favorites.svg') }}"
+                        alt="No favorites saved yet"
+                        class="no-favorites-image">
+                    <h3> Your favorites list is empty </h3>
+                    <p> Save recipes you love and they'll appear here for quick access. </p>
+                    <button class="btn-primary" type="submit" onclick="window.location.href='{{ url_for('home') }}'">
+                        <img 
+                        src = "{{ url_for ('static', filename='search.svg')}}"
+                        alt=" "
+                        class="button-icon">
+                        Make a Search
+                    </button>
+                </div>
             {% endif %}
 
             <div class="recipe-grid"> 
