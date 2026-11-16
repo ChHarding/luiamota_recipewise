@@ -11,6 +11,9 @@ import requests
 # Creating a Flask application instance
 app = Flask(__name__)
 
+# Importing Supabase client
+from supabase_client import supabase
+
 # ==================================================
 # BLOCK 1: SEARCH RECIPES
 # ==================================================
@@ -37,6 +40,9 @@ def search_recipes(recipe_name):
     response = requests.get(url)
     # Turning the response to JSON format.
     data = response.json()
+    # If no matching recipes are found, the API returns None. 
+    if data ["meals"] is None:
+        return []
     # Returning the list of matching recipes (meals) from the API response.
     return data ["meals"]
 
@@ -93,8 +99,6 @@ def get_recipe_details(meal_id):
 # - Recipe data is stored in Supabase favorites table. 
 # - Before saving a recipe, the system checks wether the recipe already exists.
 # ---------------------------------------------------
-# Importing Supabase client
-from supabase_client import supabase
 def save_recipe(meal_id):
 
     # Retrieve recipe details from TheMealDB API.
@@ -155,6 +159,7 @@ def home():
     meals = [] # Stores matching results from the API
     recipe_count = 0 # Recipe's counter
     recipe_name = "" # Stores user's search query. 
+    no_results_message = False # Flag to display a message when no results are found.
     
     if request.method == "POST":
         # Get the recipe name from the search form submitted by the user
@@ -162,7 +167,9 @@ def home():
         # Call the search_recipes function to get matching recipes from TheMealDB API
         meals = search_recipes(recipe_name) 
         # Count the number of matching recipes found to display on the home page.
-        recipe_count = len(meals) 
+        recipe_count = len(meals) if meals else 0
+        # If no matching recipes are found, display a 404 message on the home page.
+        no_results_message = request.method == "POST" and recipe_count == 0
     
     # Retrieve the list of favorite recipes from Supabase to display on the home page.
     favorites_recipes = (
@@ -182,6 +189,7 @@ def home():
         meals=meals,
         recipe_count=recipe_count,
         recipe_name=recipe_name,
+        no_results_message=no_results_message,
         favorites_ids=favorites_ids
     )
 
